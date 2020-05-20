@@ -7,6 +7,7 @@ let config = {
     default: "arcade",
     arcade: {
       debug: true,
+      gravity: { y: 100 },
     },
   },
   scene: [SceneLoad, SceneMain],
