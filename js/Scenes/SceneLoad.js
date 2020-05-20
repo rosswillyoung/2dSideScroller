@@ -10,6 +10,7 @@ class SceneLoad extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 32,
     });
+    this.load.image("singleTile", "Assets/images/1tile.png");
   }
   create() {
     this.scene.start("SceneMain");
