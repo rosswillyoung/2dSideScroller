@@ -6,7 +6,6 @@ class Tile extends Phaser.GameObjects.Image {
     this.setScale(0.05);
     this.setInteractive();
     this.on("pointerdown", (e) => {
-      console.log(this.getBounds().y, config.scene.player.getBounds().y);
       if (
         config.scene.player.getBounds().x >= this.getBounds().x - 20 &&
         config.scene.player.getBounds().x <= this.getBounds().x + 20 &&

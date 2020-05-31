@@ -3,11 +3,11 @@ class SceneMain extends Phaser.Scene {
     super("SceneMain");
   }
   create() {
-    // let map = this.make.tilemap({ key: "background" });
+    // tile array so we can programmatically create tiles and point to them
     this.tiles = [];
     this.map = this.make.tilemap({ key: "wide" });
     this.tileset = this.map.addTilesetImage("background", "gradient");
-    this.groundTileset = this.map.addTilesetImage("objects", "tiles");
+    // this.groundTileset = this.map.addTilesetImage("objects", "tiles");
     this.background = this.map.createStaticLayer(
       "Tile Layer 1",
       this.tileset,
@@ -18,43 +18,18 @@ class SceneMain extends Phaser.Scene {
       immovable: true,
       allowGravity: false,
     });
+    this.createTiles();
 
-    // this.testTile = new Tile({
-    //   scene: this,
-    //   x: 100,
-    //   y: 400,
-    //   key: "singleTile",
-    // });
-    // this.tile1 = new Tile({
-    //   scene: this,
-    //   x: 16,
-    //   y: 400,
-    //   key: "singleTile",
-    // });
-    // this.testTile.setGravityY(-100);
-    // this.tile = this.physics.add
-    //   .staticImage(100, 400, "singleTile")
-    //   .setScale(0.1)
-    //   .refreshBody();
-
-    // this.tileGroup.add(this.tile);
-    // this.tileGroup.add(this.tile2);
-
-    // this.ground = this.map.createStaticLayer(
-    //   "ground",
-    //   this.groundTileset,
-    //   0,
-    //   0
-    // );
-    // this.ground.setCollisionByExclusion(-1, true);
     this.player = this.physics.add.sprite(100, 100, "player");
     this.player.setGravityY(100);
     this.player.body.offset.y = 5;
     this.player.body.height = 22;
     this.player.setCollideWorldBounds();
-    // this.physics.add.collider(this.player, this.ground, (e) => {});
     this.physics.add.collider(this.player, this.tileGroup, (e, e2) => {
-      this.setTouching();
+      if (e.body.touching.down) {
+        // console.log(e.body);
+        this.setTouching();
+      }
     });
     this.keys = this.input.keyboard.addKeys({
       a: "A",
@@ -83,7 +58,6 @@ class SceneMain extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
-    this.createTiles();
   }
   update() {
     if (
@@ -104,6 +78,8 @@ class SceneMain extends Phaser.Scene {
     }
   }
 
+  // set a variable to true and then back to false after a millisecond
+  // using this to allow for jumping after player collides with floor
   setTouching() {
     this.touching = true;
     setTimeout(() => {
@@ -112,14 +88,33 @@ class SceneMain extends Phaser.Scene {
   }
 
   createTiles() {
-    for (let i = 0; i < 100; i++) {
-      this.tiles[i] = new Tile({
-        x: i * 16,
-        y: 400,
-        key: "singleTile",
-        scene: this,
-      });
-      this.tileGroup.add(this.tiles[i]);
+    // y location to start the tiles at
+    let yy = 300;
+    for (let x = 0; x < 20; x++) {
+      this.tiles[x] = [];
+      for (let i = 0; i < 100; i++) {
+        this.tiles[x][i] = new Tile({
+          x: i * 16,
+          y: yy,
+          key: this.getRandomTile(yy),
+          scene: this,
+        });
+        this.tileGroup.add(this.tiles[x][i]);
+      }
+      yy += 16;
+    }
+  }
+
+  getRandomTile(y) {
+    let tileRNG = Math.random();
+    if (y <= 300) {
+      return "singleTile";
+    } else if (tileRNG > 0.7 && tileRNG < 0.9) {
+      return "clayTile";
+    } else if (tileRNG >= 0.9) {
+      return "purpleTile";
+    } else {
+      return "normalTile";
     }
   }
 }

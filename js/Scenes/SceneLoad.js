@@ -11,6 +11,9 @@ class SceneLoad extends Phaser.Scene {
       frameHeight: 32,
     });
     this.load.image("singleTile", "Assets/images/1tile.png");
+    this.load.image("clayTile", "Assets/images/2tile.png");
+    this.load.image("purpleTile", "Assets/images/3tile.png");
+    this.load.image("normalTile", "Assets/images/4tile.png");
   }
   create() {
     this.scene.start("SceneMain");
