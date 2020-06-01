@@ -21,15 +21,16 @@ class SceneMain extends Phaser.Scene {
     this.createTiles();
 
     this.player = this.physics.add.sprite(100, 100, "player");
-    this.player.setGravityY(100);
     this.player.body.offset.y = 5;
     this.player.body.height = 22;
+    this.player.body.offset.x = 1;
+    this.player.body.width = 14;
     this.player.setCollideWorldBounds();
     this.physics.add.collider(this.player, this.tileGroup, (e, e2) => {
-      if (e.body.touching.down) {
-        // console.log(e.body);
+      if (e.body.x > e2.body.x - 12 && e.body.x < e2.body.x + 12) {
         this.setTouching();
       }
+      // console.log(e.body.center.x, e2.body.center.x);
     });
     this.keys = this.input.keyboard.addKeys({
       a: "A",
@@ -60,11 +61,13 @@ class SceneMain extends Phaser.Scene {
     });
   }
   update() {
-    if (
-      (this.keys.space.isDown || this.keys.up.isDown) &&
-      (this.player.body.onFloor() || this.touching)
-    ) {
+    // if (this.player.body.touching.down) {
+    //   this.setTouching();
+    // }
+    // this.player.body.onFloor() ||
+    if ((this.keys.space.isDown || this.keys.up.isDown) && this.touching) {
       this.player.setVelocityY(-100);
+      console.log(this.player);
     }
     if (this.keys.d.isDown || this.keys.right.isDown) {
       this.player.setVelocityX(100);
@@ -100,6 +103,8 @@ class SceneMain extends Phaser.Scene {
           scene: this,
         });
         this.tileGroup.add(this.tiles[x][i]);
+        // this.tiles[x][i].body.offset.x = 0.5;
+        // this.tiles[x][i].body.width = 15;
       }
       yy += 16;
     }

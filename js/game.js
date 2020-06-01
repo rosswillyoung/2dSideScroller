@@ -6,8 +6,8 @@ let config = {
   physics: {
     default: "arcade",
     arcade: {
-      // debug: true,
-      // gravity: { y: 100 },
+      debug: true,
+      gravity: { y: 100 },
     },
   },
   scene: [SceneLoad, SceneMain],
