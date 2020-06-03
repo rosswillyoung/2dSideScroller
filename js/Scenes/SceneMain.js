@@ -19,18 +19,24 @@ class SceneMain extends Phaser.Scene {
       allowGravity: false,
     });
     this.createTiles();
+    this.scene.add("inventory", Inventory);
 
-    this.player = this.physics.add.sprite(100, 100, "player");
-    this.player.body.offset.y = 5;
-    this.player.body.height = 22;
-    this.player.body.offset.x = 1;
-    this.player.body.width = 14;
-    this.player.setCollideWorldBounds();
+    // this.player = this.physics.add.sprite(100, 100, "player");
+    // this.player.body.offset.y = 5;
+    // this.player.body.height = 22;
+    // this.player.body.offset.x = 1;
+    // this.player.body.width = 14;
+    // this.player.setCollideWorldBounds();
+    this.player = new Player({
+      scene: this,
+      x: 100,
+      y: 100,
+      key: "player",
+    });
     this.physics.add.collider(this.player, this.tileGroup, (e, e2) => {
       if (e.body.x > e2.body.x - 12 && e.body.x < e2.body.x + 12) {
         this.setTouching();
       }
-      // console.log(e.body.center.x, e2.body.center.x);
     });
     this.keys = this.input.keyboard.addKeys({
       a: "A",
@@ -67,7 +73,7 @@ class SceneMain extends Phaser.Scene {
     // this.player.body.onFloor() ||
     if ((this.keys.space.isDown || this.keys.up.isDown) && this.touching) {
       this.player.setVelocityY(-100);
-      console.log(this.player);
+      // this.openInventory();
     }
     if (this.keys.d.isDown || this.keys.right.isDown) {
       this.player.setVelocityX(100);
@@ -88,6 +94,16 @@ class SceneMain extends Phaser.Scene {
     setTimeout(() => {
       this.touching = false;
     }, 100);
+  }
+  // setBlocked() {
+  //   this.blocked = true;
+  //   setTimeout(() => {
+  //     this.blocked = false;
+  //   }, 100);
+  // }
+
+  openInventory() {
+    this.inventory = this.scene.run("inventory");
   }
 
   createTiles() {

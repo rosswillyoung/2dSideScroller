@@ -3,7 +3,8 @@ class Tile extends Phaser.GameObjects.Image {
     super(config.scene, config.x, config.y, config.key);
     config.scene.add.existing(this);
     config.scene.physics.world.enable(this);
-    this.setScale(0.05);
+    this.setScale(0.05, 0.05);
+
     this.setInteractive();
     this.on("pointerdown", (e) => {
       if (
